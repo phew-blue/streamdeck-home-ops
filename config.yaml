@@ -235,13 +235,13 @@ namespaces:
         url: https://rustdesk.phew.blue
       - name: smtp-relay
         deployment: smtp-relay
-        url: https://phew.blue
+        url: https://phew.blue  # no web UI, placeholder
       - name: echo
         deployment: echo
         url: https://echo.phew.blue
       - name: glauth
         deployment: glauth
-        url: https://phew.blue
+        url: https://phew.blue  # no web UI, placeholder
 
   - name: observability
     color: "#880e4f"
@@ -295,10 +295,10 @@ namespaces:
     apps:
       - name: crunchy-postgres
         deployment: crunchy-postgres-ha
-        url: https://phew.blue
+        url: https://phew.blue  # no web UI
       - name: dragonfly
         deployment: dragonfly
-        url: https://phew.blue
+        url: https://phew.blue  # no web UI
       - name: hasura
         deployment: hasura
         url: https://hasura.phew.blue
