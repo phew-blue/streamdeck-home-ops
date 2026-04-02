@@ -1,0 +1,304 @@
+# Stream Deck Home Ops configuration
+# All URLs follow the pattern https://{app}.phew.blue unless overridden
+
+install_path: "C:\\StreamDeck-HomeOps"
+domain: phew.blue
+kromgo_url: https://kromgo.phew.blue
+
+nodes:
+  - name: talos-01
+    role: control-plane
+  - name: talos-02
+    role: control-plane
+  - name: talos-03
+    role: control-plane
+  - name: talos-04
+    role: worker
+  - name: talos-05
+    role: worker
+
+# Pinned apps shown on main page row 3 (cols 2-6)
+pinned:
+  - namespace: observability
+    app: grafana
+    url: https://grafana.phew.blue
+  - namespace: default
+    app: gatus
+    url: https://status.phew.blue
+  - namespace: lab
+    app: headlamp
+    url: https://headlamp.phew.blue
+  - namespace: lab
+    app: homepage
+    url: https://homepage.phew.blue
+  - namespace: home-automation
+    app: home-assistant
+    url: https://home.phew.blue
+
+namespaces:
+  - name: media
+    color: "#1565c0"
+    apps:
+      - name: plex
+        deployment: plex
+        url: https://plex.phew.blue
+      - name: tautulli
+        deployment: tautulli
+        url: https://tautulli.phew.blue
+      - name: navidrome
+        deployment: navidrome
+        url: https://navidrome.phew.blue
+      - name: audiobookshelf
+        deployment: audiobookshelf
+        url: https://audiobookshelf.phew.blue
+      - name: romm
+        deployment: romm
+        url: https://romm.phew.blue
+      - name: maintainerr
+        deployment: maintainerr
+        url: https://maintainerr.phew.blue
+      - name: tracearr
+        deployment: tracearr
+        url: https://tracearr.phew.blue
+
+  - name: downloads
+    color: "#4a148c"
+    apps:
+      - name: sonarr
+        deployment: sonarr
+        url: https://sonarr.phew.blue
+      - name: radarr
+        deployment: radarr
+        url: https://radarr.phew.blue
+      - name: prowlarr
+        deployment: prowlarr
+        url: https://prowlarr.phew.blue
+      - name: qbittorrent
+        deployment: qbittorrent
+        url: https://qbittorrent.phew.blue
+      - name: bazarr
+        deployment: bazarr
+        url: https://bazarr.phew.blue
+      - name: autobrr
+        deployment: autobrr
+        url: https://autobrr.phew.blue
+      - name: lidarr
+        deployment: lidarr
+        url: https://lidarr.phew.blue
+      - name: readarr
+        deployment: readarr
+        url: https://readarr.phew.blue
+      - name: pinchflat
+        deployment: pinchflat
+        url: https://pinchflat.phew.blue
+      - name: dashbrr
+        deployment: dashbrr
+        url: https://dashbrr.phew.blue
+      - name: agregarr
+        deployment: agregarr
+        url: https://agregarr.phew.blue
+      - name: qui
+        deployment: qui
+        url: https://qui.phew.blue
+      - name: recyclarr
+        deployment: recyclarr
+        url: https://recyclarr.phew.blue
+      - name: taggarr
+        deployment: taggarr
+        url: https://taggarr.phew.blue
+
+  - name: home
+    color: "#1b5e20"
+    apps:
+      - name: mealie
+        deployment: mealie
+        url: https://mealie.phew.blue
+      - name: tandoor
+        deployment: tandoor
+        url: https://tandoor.phew.blue
+      - name: immich
+        deployment: immich-server
+        url: https://immich.phew.blue
+      - name: paperless
+        deployment: paperless-ngx
+        url: https://paperless.phew.blue
+      - name: homebox
+        deployment: homebox
+        url: https://homebox.phew.blue
+      - name: karakeep
+        deployment: karakeep
+        url: https://karakeep.phew.blue
+      - name: adventurelog
+        deployment: adventurelog-frontend
+        url: https://adventurelog.phew.blue
+      - name: scanservjs
+        deployment: scanservjs
+        url: https://scan.phew.blue
+      - name: nourish
+        deployment: nourish
+        url: https://nourish.phew.blue
+      - name: trek
+        deployment: trek
+        url: https://trek.phew.blue
+
+  - name: home-automation
+    color: "#e65100"
+    apps:
+      - name: home-assistant
+        deployment: home-assistant
+        url: https://home.phew.blue
+
+  - name: lab
+    color: "#006064"
+    apps:
+      - name: homepage
+        deployment: homepage
+        url: https://homepage.phew.blue
+      - name: glance
+        deployment: glance
+        url: https://glance.phew.blue
+      - name: headlamp
+        deployment: headlamp
+        url: https://headlamp.phew.blue
+      - name: open-webui
+        deployment: open-webui
+        url: https://open-webui.phew.blue
+      - name: ollama
+        deployment: ollama
+        url: https://ollama.phew.blue
+      - name: code-server
+        deployment: code-server
+        url: https://code.phew.blue
+      - name: n8n
+        deployment: n8n
+        url: https://n8n.phew.blue
+      - name: nyx
+        deployment: nyx
+        url: https://nyx.phew.blue
+      - name: netbox
+        deployment: netbox
+        url: https://netbox.phew.blue
+      - name: searxng
+        deployment: searxng
+        url: https://searxng.phew.blue
+      - name: comfyui
+        deployment: comfyui
+        url: https://comfyui.phew.blue
+      - name: companion
+        deployment: companion
+        url: https://companion.phew.blue
+      - name: rackula
+        deployment: rackula
+        url: https://rackula.phew.blue
+      - name: netboot-xyz
+        deployment: netboot-xyz
+        url: https://netboot.phew.blue
+
+  - name: default
+    color: "#37474f"
+    apps:
+      - name: authelia
+        deployment: authelia
+        url: https://auth.phew.blue
+      - name: gatus
+        deployment: gatus
+        url: https://status.phew.blue
+      - name: hearth
+        deployment: hearth
+        url: https://hearth.phew.blue
+      - name: lexi
+        deployment: lexi
+        url: https://lexi.phew.blue
+      - name: seerr
+        deployment: seerr
+        url: https://seerr.phew.blue
+      - name: scan
+        deployment: scan
+        url: https://scan.phew.blue
+      - name: it-tools
+        deployment: it-tools
+        url: https://it-tools.phew.blue
+      - name: erugo
+        deployment: erugo
+        url: https://share.phew.blue
+      - name: convertx
+        deployment: convertx
+        url: https://convert.phew.blue
+      - name: bento-pdf
+        deployment: bento-pdf
+        url: https://pdf.phew.blue
+      - name: website
+        deployment: website
+        url: https://phew.blue
+      - name: rustdesk
+        deployment: rustdesk
+        url: https://rustdesk.phew.blue
+      - name: smtp-relay
+        deployment: smtp-relay
+        url: https://phew.blue
+      - name: echo
+        deployment: echo
+        url: https://echo.phew.blue
+      - name: glauth
+        deployment: glauth
+        url: https://phew.blue
+
+  - name: observability
+    color: "#880e4f"
+    apps:
+      - name: grafana
+        deployment: grafana
+        url: https://grafana.phew.blue
+      - name: kube-prometheus-stack
+        deployment: kube-prometheus-stack-prometheus
+        url: https://prometheus.phew.blue
+      - name: loki
+        deployment: loki
+        url: https://grafana.phew.blue
+      - name: alloy
+        deployment: alloy
+        url: https://grafana.phew.blue
+      - name: goldilocks
+        deployment: goldilocks-dashboard
+        url: https://goldilocks.phew.blue
+      - name: netronome
+        deployment: netronome
+        url: https://netronome.phew.blue
+      - name: snmp-exporter
+        deployment: snmp-exporter
+        url: https://grafana.phew.blue
+      - name: unpoller
+        deployment: unpoller
+        url: https://grafana.phew.blue
+      - name: kromgo
+        deployment: kromgo
+        url: https://grafana.phew.blue
+
+  - name: network
+    color: "#bf360c"
+    apps:
+      - name: cloudflare-tunnel
+        deployment: cloudflare-tunnel
+        url: https://dash.cloudflare.com
+      - name: cloudflare-dns
+        deployment: cloudflare-dns
+        url: https://dash.cloudflare.com
+      - name: k8s-gateway
+        deployment: k8s-gateway
+        url: https://phew.blue
+      - name: unifi-dns
+        deployment: unifi-dns
+        url: https://phew.blue
+
+  - name: db
+    color: "#0d47a1"
+    apps:
+      - name: crunchy-postgres
+        deployment: crunchy-postgres-ha
+        url: https://phew.blue
+      - name: dragonfly
+        deployment: dragonfly
+        url: https://phew.blue
+      - name: hasura
+        deployment: hasura
+        url: https://hasura.phew.blue
