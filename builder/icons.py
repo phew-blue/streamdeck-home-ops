@@ -82,6 +82,12 @@ def generate_action_icons():
     _gen_action_icon("nav-up", "#212121", "UP", "#ffffff")
     _gen_action_icon("nav-down", "#212121", "DOWN", "#ffffff")
     _gen_action_icon("update-profile", "#4a148c", "UPDATE", "#ce93d8")
+    _gen_action_icon("node-node",   "#37474f", "NODE", "#b0bec5")
+    _gen_action_icon("node-pods",   "#37474f", "PODS", "#b0bec5")
+    _gen_action_icon("node-cpu",    "#37474f", "CPU",  "#b0bec5")
+    _gen_action_icon("node-ram",    "#37474f", "RAM",  "#b0bec5")
+    _gen_action_icon("talos",       "#0075a8", "TALOS","#ffffff")
+    _gen_action_icon("k8s",         "#326ce5", "K8S",  "#ffffff")
 
 
 def _gen_action_icon(name: str, bg: str, label: str, fg: str):
