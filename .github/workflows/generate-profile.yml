@@ -9,6 +9,9 @@ on:
       - 'generate.py'
       - 'plugin/src/**'
       - 'plugin/manifest.json'
+      - 'plugin/package.json'
+      - 'plugin/package-lock.json'
+  workflow_dispatch:
 
 jobs:
   generate:
