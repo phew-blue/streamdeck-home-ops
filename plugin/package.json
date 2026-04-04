@@ -1,0 +1,17 @@
+{
+  "name": "com.phewblue.homeops",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/plugin.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@elgato/streamdeck": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.0.0"
+  }
+}
