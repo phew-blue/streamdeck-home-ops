@@ -1,0 +1,63 @@
+name: Generate Stream Deck Profile
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'config.yaml'
+      - 'builder/**'
+      - 'generate.py'
+      - 'plugin/src/**'
+      - 'plugin/manifest.json'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install plugin dependencies
+        run: npm ci
+        working-directory: plugin
+
+      - name: Build plugin
+        run: bash build-plugin.sh
+        working-directory: plugin
+
+      - name: Generate Stream Deck profile
+        run: python generate.py
+
+      - name: Commit generated profile
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add profile/home-ops.streamDeckProfile
+          git diff --staged --quiet || git commit -m "chore: regenerate Stream Deck profile [skip ci]"
+          git push
+
+      - name: Create release with profile asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: "Latest Profile"
+          body: "Auto-generated Stream Deck profile. Import `home-ops.streamDeckProfile` in the Elgato Stream Deck app."
+          files: profile/home-ops.streamDeckProfile
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
