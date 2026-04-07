@@ -2,16 +2,19 @@
   "name": "com.phew.blue.homeops",
   "version": "1.0.0",
   "type": "module",
-  "main": "dist/plugin.js",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
+    "build": "rollup --config rollup.config.mjs",
+    "dev": "rollup --config rollup.config.mjs --watch"
   },
   "dependencies": {
     "@elgato/streamdeck": "*"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-typescript": "^11.0.0",
     "@types/node": "^25.0.0",
+    "rollup": "^4.0.0",
+    "tslib": "^2.0.0",
     "typescript": "^6.0.0"
   }
 }

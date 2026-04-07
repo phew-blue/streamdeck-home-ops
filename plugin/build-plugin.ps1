@@ -21,14 +21,12 @@ if ($Install) {
     if (Test-Path $Dest) { Remove-Item $Dest -Recurse -Force }
 
     # Create destination directories
-    New-Item -ItemType Directory -Force -Path $Dest | Out-Null
+    New-Item -ItemType Directory -Force -Path "$Dest\bin" | Out-Null
     New-Item -ItemType Directory -Force -Path "$Dest\imgs" | Out-Null
-    New-Item -ItemType Directory -Force -Path "$Dest\node_modules" | Out-Null
 
-    Copy-Item -Path "dist\*"        -Destination $Dest -Recurse -Force
-    Copy-Item -Path "imgs\*"        -Destination "$Dest\imgs\" -Recurse -Force
-    Copy-Item -Path "manifest.json" -Destination $Dest -Force
-    Copy-Item -Path "package.json"  -Destination $Dest -Force
-    Copy-Item -Path "node_modules\*" -Destination "$Dest\node_modules\" -Recurse -Force
+    Copy-Item -Path "dist\plugin.js"        -Destination "$Dest\bin\plugin.js" -Force
+    Copy-Item -Path "dist\plugin.js.map"    -Destination "$Dest\bin\plugin.js.map" -Force -ErrorAction SilentlyContinue
+    Copy-Item -Path "imgs\*"               -Destination "$Dest\imgs\" -Recurse -Force
+    Copy-Item -Path "manifest.json"        -Destination $Dest -Force
     Write-Host "Plugin installed. Restart Stream Deck software to load it." -ForegroundColor Green
 }

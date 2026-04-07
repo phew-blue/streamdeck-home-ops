@@ -5,7 +5,7 @@
   "Description": "Live Kubernetes cluster status for home-ops",
   "Category": "Home Ops",
   "CategoryIcon": "imgs/plugin-icon",
-  "CodePath": "plugin.js",
+  "CodePath": "bin/plugin.js",
   "Icon": "imgs/plugin-icon",
   "UUID": "com.phew.blue.homeops",
   "SDKVersion": 2,
