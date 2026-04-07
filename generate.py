@@ -2,6 +2,7 @@
 # generate.py
 """Entry point: reads config.yaml, builds .streamDeckProfile."""
 
+import argparse
 import yaml
 from pathlib import Path
 from builder.icons import download_all_icons
@@ -47,8 +48,37 @@ def generate(config: dict, output_path: str = "profile/home-ops.streamDeckProfil
     build_zip(landing, output_path)
     print(f"\n✓ Profile written to {output_path}")
 
+    return landing
+
+
+def embed(config: dict, default_profile: str = "Default Profile.streamDeckProfile"):
+    """Generate the home-ops profile then embed it into the Default Profile."""
+    from builder.embed import embed_home_ops
+
+    hop_path = "profile/home-ops.streamDeckProfile"
+    generate(config, output_path=hop_path)
+    print(f"\nEmbedding into {default_profile} ...")
+    embed_home_ops(default_profile, hop_path)
+
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--embed",
+        action="store_true",
+        help="Also embed the home-ops pages into 'Default Profile.streamDeckProfile'",
+    )
+    parser.add_argument(
+        "--default-profile",
+        default="Default Profile.streamDeckProfile",
+        help="Path to the Default Profile ZIP to embed into (used with --embed)",
+    )
+    args = parser.parse_args()
+
     with open("config.yaml") as f:
         config = yaml.safe_load(f)
-    generate(config)
+
+    if args.embed:
+        embed(config, default_profile=args.default_profile)
+    else:
+        generate(config)
