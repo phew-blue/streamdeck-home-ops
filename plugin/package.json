@@ -3,19 +3,14 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "rollup --config rollup.config.mjs",
-    "dev": "rollup --config rollup.config.mjs --watch"
+    "build": "esbuild src/plugin.ts --bundle --platform=node --format=esm --outfile=dist/plugin.js --sourcemap"
   },
   "dependencies": {
     "@elgato/streamdeck": "*"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^28.0.0",
-    "@rollup/plugin-node-resolve": "^15.0.0",
-    "@rollup/plugin-typescript": "^11.0.0",
     "@types/node": "^25.0.0",
-    "rollup": "^4.0.0",
-    "tslib": "^2.0.0",
+    "esbuild": "^0.25.0",
     "typescript": "^6.0.0"
   }
 }

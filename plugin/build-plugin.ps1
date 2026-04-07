@@ -14,6 +14,7 @@ if (-not (Test-Path "node_modules")) {
 
 Write-Host "Building TypeScript..." -ForegroundColor Cyan
 npm run build
+if ($LASTEXITCODE -ne 0) { Write-Error "Build failed"; exit 1 }
 
 if ($Install) {
     $Dest = "$PluginsDir\$PluginUUID.sdPlugin"
