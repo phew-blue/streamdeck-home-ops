@@ -53,12 +53,35 @@ def generate(config: dict, output_path: str = "profile/home-ops.streamDeckProfil
 
 def embed(config: dict, default_profile: str = "Default Profile.streamDeckProfile"):
     """Generate the home-ops profile then embed it into the Default Profile."""
+    import requests
     from builder.embed import embed_home_ops
+    from PIL import Image
+    import io
 
     hop_path = "profile/home-ops.streamDeckProfile"
     generate(config, output_path=hop_path)
+
+    # Download and resize Discord server icon for the Home Ops button
+    icon_url = "https://cdn.discordapp.com/icons/673534664354430999/a_1824509333499341fd53b3d9389c5660.webp?size=64"
+    icon_dest = Path("icons/home-ops.png")
+    home_ops_icon = None
+    try:
+        resp = requests.get(icon_url, timeout=15)
+        if resp.status_code == 200:
+            img = Image.open(io.BytesIO(resp.content)).convert("RGBA")
+            img = img.resize((144, 144), Image.LANCZOS)
+            buf = io.BytesIO()
+            img.save(buf, format="PNG")
+            home_ops_icon = buf.getvalue()
+            img.save(icon_dest)
+            print("✓ Home Ops icon downloaded")
+        else:
+            print(f"✗ Home Ops icon not available (HTTP {resp.status_code}), using text label")
+    except Exception as e:
+        print(f"✗ Home Ops icon error: {e}, using text label")
+
     print(f"\nEmbedding into {default_profile} ...")
-    embed_home_ops(default_profile, hop_path)
+    embed_home_ops(default_profile, hop_path, home_ops_icon=home_ops_icon)
 
 
 if __name__ == "__main__":
