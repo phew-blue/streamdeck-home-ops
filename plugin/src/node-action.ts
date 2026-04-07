@@ -22,7 +22,7 @@ async function run(cmd: string): Promise<string> {
   } catch { return ""; }
 }
 
-@action({ UUID: "com.phewblue.homeops.node" })
+@action({ UUID: "com.phew.blue.homeops.node" })
 export class NodeAction extends SingletonAction {
   private timers = new Map<string, ReturnType<typeof setInterval>>();
 

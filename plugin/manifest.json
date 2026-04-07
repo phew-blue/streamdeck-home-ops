@@ -5,9 +5,9 @@
   "Description": "Live Kubernetes cluster status for home-ops",
   "Category": "Home Ops",
   "CategoryIcon": "imgs/plugin-icon",
-  "CodePath": "dist/plugin.js",
+  "CodePath": "plugin.js",
   "Icon": "imgs/plugin-icon",
-  "UUID": "com.phewblue.homeops",
+  "UUID": "com.phew.blue.homeops",
   "SDKVersion": 2,
   "Software": { "MinimumVersion": "6.4" },
   "OS": [{ "Platform": "windows", "MinimumVersion": "10" }],
@@ -15,7 +15,7 @@
   "Actions": [
     {
       "Name": "App Status",
-      "UUID": "com.phewblue.homeops.status",
+      "UUID": "com.phew.blue.homeops.status",
       "Icon": "imgs/status-icon",
       "Tooltip": "Shows live pod count, restarts, CPU and RAM",
       "Controllers": ["Keypad"],
@@ -23,7 +23,7 @@
     },
     {
       "Name": "Cluster Metric",
-      "UUID": "com.phewblue.homeops.cluster",
+      "UUID": "com.phew.blue.homeops.cluster",
       "Icon": "imgs/status-icon",
       "Tooltip": "Shows live cluster metric from kromgo",
       "Controllers": ["Keypad"],
@@ -31,7 +31,7 @@
     },
     {
       "Name": "Node Status",
-      "UUID": "com.phewblue.homeops.node",
+      "UUID": "com.phew.blue.homeops.node",
       "Icon": "imgs/status-icon",
       "Tooltip": "Shows live Kubernetes node status",
       "Controllers": ["Keypad"],

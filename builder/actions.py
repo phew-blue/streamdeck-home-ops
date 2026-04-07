@@ -64,7 +64,7 @@ def plugin_status_action(app: str, namespace: str, deployment: str, metric: str)
     """Create a live status button driven by the custom plugin."""
     return {
         "Name": f"{app}-{metric}",
-        "UUID": "com.phewblue.homeops.status",
+        "UUID": "com.phew.blue.homeops.status",
         "State": 0,
         "States": [{"Image": "Icons/status-loading", "ShowTitle": True, "Title": "..."}],
         "Settings": {

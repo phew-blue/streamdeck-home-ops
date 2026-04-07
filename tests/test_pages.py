@@ -60,5 +60,5 @@ def test_build_status_layer_has_plugin_buttons():
         )
     # col 2 row 1 = pos 9 → pods status for first app
     assert "9" in layer["Actions"]
-    assert layer["Actions"]["9"]["UUID"] == "com.phewblue.homeops.status"
+    assert layer["Actions"]["9"]["UUID"] == "com.phew.blue.homeops.status"
     assert layer["Actions"]["9"]["Settings"]["metric"] == "pods"

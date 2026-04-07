@@ -13,7 +13,7 @@ def _node_action(node_name: str, role: str, metric: str) -> dict:
     name = f"{node_name} ({label})" if metric == "node" else f"{node_name} {metric}"
     return {
         "Name": name,
-        "UUID": "com.phewblue.homeops.node",
+        "UUID": "com.phew.blue.homeops.node",
         "State": 0,
         "States": [{"Image": f"Icons/node-{metric}", "ShowTitle": True, "Title": "..."}],
         "Settings": {"node": node_name, "role": role, "metric": metric},

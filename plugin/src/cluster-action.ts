@@ -24,7 +24,7 @@ const COLOR_MAP: Record<string, string> = {
   grey:   "#424242",
 };
 
-@action({ UUID: "com.phewblue.homeops.cluster" })
+@action({ UUID: "com.phew.blue.homeops.cluster" })
 export class ClusterAction extends SingletonAction {
   private timers = new Map<string, ReturnType<typeof setInterval>>();
 

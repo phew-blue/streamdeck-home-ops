@@ -43,7 +43,7 @@ def test_open_file_action():
 
 def test_plugin_status_action():
     a = plugin_status_action("plex", "media", "plex", "pods")
-    assert a["UUID"] == "com.phewblue.homeops.status"
+    assert a["UUID"] == "com.phew.blue.homeops.status"
     assert a["Settings"]["app"] == "plex"
     assert a["Settings"]["namespace"] == "media"
     assert a["Settings"]["metric"] == "pods"

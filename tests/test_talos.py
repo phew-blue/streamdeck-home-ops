@@ -18,7 +18,7 @@ def test_talos_page_has_node_columns():
     # talos-01 at row 0 col 1 → pos 1
     assert "1" in m["Actions"]
     assert m["Actions"]["1"]["Settings"]["node"] == "talos-01"
-    assert m["Actions"]["1"]["UUID"] == "com.phewblue.homeops.node"
+    assert m["Actions"]["1"]["UUID"] == "com.phew.blue.homeops.node"
 
 def test_talos_page_pods_row():
     m = build_talos_page(NODES)

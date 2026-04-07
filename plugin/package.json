@@ -1,5 +1,5 @@
 {
-  "name": "com.phewblue.homeops",
+  "name": "com.phew.blue.homeops",
   "version": "1.0.0",
   "type": "module",
   "main": "dist/plugin.js",

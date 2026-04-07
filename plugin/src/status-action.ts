@@ -11,7 +11,7 @@ import { getPodStatus, getCpuUsage, getRamUsage } from "./kubectl.js";
 
 const POLL_INTERVAL_MS = 30_000;
 
-@action({ UUID: "com.phewblue.homeops.status" })
+@action({ UUID: "com.phew.blue.homeops.status" })
 export class StatusAction extends SingletonAction {
   private timers = new Map<string, ReturnType<typeof setInterval>>();
 

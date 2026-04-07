@@ -27,7 +27,7 @@ def test_landing_has_flux_display():
     m = build_landing_page(K8S, TALOS, r"C:\sd", "https://kromgo.phew.blue")
     # Flux at row 0 col 4 → pos 4
     assert "4" in m["Actions"]
-    assert m["Actions"]["4"]["UUID"] == "com.phewblue.homeops.cluster"
+    assert m["Actions"]["4"]["UUID"] == "com.phew.blue.homeops.cluster"
     assert m["Actions"]["4"]["Settings"]["metric"] == "flux_version"
 
 def test_landing_stats_row2():

@@ -34,7 +34,7 @@ STAT_LABELS = {
 def _cluster_action(metric: str, label: str, kromgo_url: str) -> dict:
     return {
         "Name": label,
-        "UUID": "com.phewblue.homeops.cluster",
+        "UUID": "com.phew.blue.homeops.cluster",
         "State": 0,
         "States": [{"Image": "Icons/status-loading", "ShowTitle": True, "Title": "..."}],
         "Settings": {"metric": metric, "kromgo_url": kromgo_url, "label": label},

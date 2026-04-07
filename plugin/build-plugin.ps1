@@ -1,7 +1,7 @@
 # build-plugin.ps1
 param([switch]$Install)
 
-$PluginUUID = "com.phewblue.homeops"
+$PluginUUID = "com.phew.blue.homeops"
 $PluginsDir = "$env:APPDATA\Elgato\StreamDeck\Plugins"
 
 Set-Location $PSScriptRoot

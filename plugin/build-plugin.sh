@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PLUGIN_UUID="com.phewblue.homeops"
+PLUGIN_UUID="com.phew.blue.homeops"
 OUT_DIR="../dist-plugin"
 
 cd "$(dirname "$0")"
