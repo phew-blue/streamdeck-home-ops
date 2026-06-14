@@ -36,7 +36,6 @@ def test_build_actions_layer_has_correct_positions():
             apps=SAMPLE_APPS[:3],
             namespace="media",
             install_path=r"C:\StreamDeck-HomeOps",
-            depth=2,
         )
     # col 1 row 0 = pos 0 → home button
     assert "0" in layer["Actions"]
@@ -54,7 +53,6 @@ def test_build_status_layer_has_plugin_buttons():
             apps=SAMPLE_APPS[:3],
             namespace="media",
             install_path=r"C:\StreamDeck-HomeOps",
-            depth=1,
             has_prev=False,
             has_next=False,
         )

@@ -21,11 +21,11 @@ def generate(config: dict, output_path: str = "profile/home-ops.streamDeckProfil
     download_all_icons(config)
     generate_launchers(config)
 
-    # Namespace pages (depth=2: landing → k8s grid → namespace)
+    # Namespace pages (landing → k8s grid → namespace)
     ns_manifests = {}
     for ns in config["namespaces"]:
         print(f"Building namespace: {ns['name']} ({len(ns['apps'])} apps)")
-        ns_manifests[ns["name"]] = build_namespace_folder(ns, install_path, root_depth=2)
+        ns_manifests[ns["name"]] = build_namespace_folder(ns, install_path)
 
     # K8s namespace grid (depth=1 from landing page)
     k8s_grid = build_k8s_grid(

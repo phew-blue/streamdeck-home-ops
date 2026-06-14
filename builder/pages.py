@@ -27,7 +27,7 @@ def _app_icon(app_name: str) -> str:
     return f"Icons/{app_name}"
 
 
-def build_actions_layer(apps: list, namespace: str, install_path: str, depth: int) -> dict:
+def build_actions_layer(apps: list, namespace: str, install_path: str) -> dict:
     """Layer 2: logs / restart / reconcile buttons per app."""
     actions = {}
 
@@ -68,7 +68,6 @@ def build_status_layer(
     apps: list,
     namespace: str,
     install_path: str,
-    depth: int,
     has_prev: bool,
     has_next: bool,
     next_folder_manifest: dict = None,
@@ -84,7 +83,6 @@ def build_status_layer(
         apps=apps,
         namespace=namespace,
         install_path=install_path,
-        depth=depth + 1,
     )
     actions[pos(1, 7)] = folder_action("Down", "Icons/actions/nav-down", actions_layer_manifest,
                                        show_title=False)
@@ -117,7 +115,7 @@ def build_status_layer(
     return make_manifest(actions)
 
 
-def build_namespace_folder(ns: dict, install_path: str, root_depth: int = 1) -> dict:
+def build_namespace_folder(ns: dict, install_path: str) -> dict:
     """Build the full nested folder manifest for a namespace."""
     chunks = chunk_apps(ns["apps"])
     namespace = ns["name"]
@@ -126,7 +124,6 @@ def build_namespace_folder(ns: dict, install_path: str, root_depth: int = 1) -> 
 
     for page_idx in range(len(chunks) - 1, -1, -1):
         chunk = chunks[page_idx]
-        depth = root_depth + page_idx
 
         next_manifest = page_manifests[page_idx + 1] if page_idx < len(chunks) - 1 else None
 
@@ -134,7 +131,6 @@ def build_namespace_folder(ns: dict, install_path: str, root_depth: int = 1) -> 
             apps=chunk,
             namespace=namespace,
             install_path=install_path,
-            depth=depth,
             has_prev=(page_idx > 0),
             has_next=(page_idx < len(chunks) - 1),
             next_folder_manifest=next_manifest,
