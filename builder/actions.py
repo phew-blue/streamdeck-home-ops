@@ -21,30 +21,12 @@ def website_action(name: str, url: str, icon: str) -> dict:
     return a
 
 
-def folder_action(name: str, icon: str, children: dict) -> dict:
+def folder_action(name: str, icon: str, children: dict, show_title: bool = True) -> dict:
     """Create a folder/profile navigation action."""
-    a = _base(name, "com.elgato.streamdeck.profile.openchild", icon, show_title=True, title=name)
+    a = _base(name, "com.elgato.streamdeck.profile.openchild", icon,
+              show_title=show_title, title=name if show_title else "")
     a["Children"] = children
     return a
-
-
-def back_action(depth: int, icon: str) -> dict:
-    """Create a back/parent navigation action. Depth > 1 uses multi-action."""
-    if depth == 1:
-        a = _base("Home", "com.elgato.streamdeck.profile.backtoparent", icon)
-        return a
-    a = _base("Home", "com.elgato.streamdeck.multi", icon)
-    a["Settings"] = {
-        "actions": [
-            {"UUID": "com.elgato.streamdeck.profile.backtoparent", "Settings": {}}
-            for _ in range(depth)
-        ]
-    }
-    return a
-
-
-# Alias for semantic clarity
-multi_back_action = back_action
 
 
 def single_back_action(name: str, icon: str) -> dict:

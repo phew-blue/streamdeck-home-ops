@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from typing import List
 from builder.actions import (
-    website_action, folder_action, back_action, single_back_action,
+    website_action, folder_action, single_back_action,
     open_file_action, plugin_status_action, empty_action,
 )
 from builder.layout import pos, make_manifest
@@ -31,8 +31,8 @@ def build_actions_layer(apps: list, namespace: str, install_path: str, depth: in
     """Layer 2: logs / restart / reconcile buttons per app."""
     actions = {}
 
-    # Col 1 row 1 (pos 0): Home
-    actions[pos(0, 0)] = back_action(depth=depth, icon="Icons/actions/nav-home")
+    # Col 1 row 1 (pos 0): Home — one level back (to status layer)
+    actions[pos(0, 0)] = single_back_action("Home", "Icons/actions/nav-home")
 
     # Col 8 row 1 (pos 7): up to status layer
     actions[pos(0, 7)] = single_back_action("Up", "Icons/actions/nav-up")
@@ -76,23 +76,25 @@ def build_status_layer(
     """Layer 1: app icon + live plugin status buttons."""
     actions = {}
 
-    # Col 1 row 1 (pos 0): Home
-    actions[pos(0, 0)] = back_action(depth=depth, icon="Icons/actions/nav-home")
+    # Col 1 row 1 (pos 0): Home — one level back (to K8s grid)
+    actions[pos(0, 0)] = single_back_action("Home", "Icons/actions/nav-home")
 
-    # Col 8 row 2 (pos 15): down to actions layer
+    # Col 8 row 2 (pos 15): down to actions layer (no title)
     actions_layer_manifest = build_actions_layer(
         apps=apps,
         namespace=namespace,
         install_path=install_path,
         depth=depth + 1,
     )
-    actions[pos(1, 7)] = folder_action("Down", "Icons/actions/nav-down", actions_layer_manifest)
+    actions[pos(1, 7)] = folder_action("Down", "Icons/actions/nav-down", actions_layer_manifest,
+                                       show_title=False)
 
     if has_prev:
         actions[pos(3, 0)] = single_back_action("Prev", "Icons/actions/nav-back")
 
     if has_next and next_folder_manifest is not None:
-        actions[pos(3, 7)] = folder_action("Next", "Icons/actions/nav-next", next_folder_manifest)
+        actions[pos(3, 7)] = folder_action("Next", "Icons/actions/nav-next", next_folder_manifest,
+                                           show_title=False)
 
     for i, app in enumerate(apps):
         col = INNER_COLS[i]
