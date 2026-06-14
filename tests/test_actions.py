@@ -1,7 +1,7 @@
 """Tests for action factory functions."""
 import pytest
 from builder.actions import (
-    website_action, folder_action, back_action, multi_back_action,
+    website_action, folder_action, single_back_action,
     open_file_action, plugin_status_action, empty_action
 )
 
@@ -22,17 +22,16 @@ def test_folder_action_has_children():
     assert a["States"][0]["ShowTitle"] is True
 
 
-def test_back_action_depth_1():
-    a = back_action(depth=1, icon="Icons/home")
+def test_folder_action_hidden_title():
+    children = {"AppearanceVersion": 2, "Actions": {}}
+    a = folder_action("Down", "Icons/actions/nav-down", children, show_title=False)
+    assert a["States"][0]["ShowTitle"] is False
+    assert a["States"][0]["Title"] == ""
+
+
+def test_single_back_action():
+    a = single_back_action("Home", "Icons/home")
     assert a["UUID"] == "com.elgato.streamdeck.profile.backtoparent"
-
-
-def test_back_action_depth_3_uses_multi():
-    a = back_action(depth=3, icon="Icons/home")
-    assert a["UUID"] == "com.elgato.streamdeck.multi"
-    assert len(a["Settings"]["actions"]) == 3
-    for sub in a["Settings"]["actions"]:
-        assert sub["UUID"] == "com.elgato.streamdeck.profile.backtoparent"
 
 
 def test_open_file_action():
