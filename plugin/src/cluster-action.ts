@@ -1,5 +1,6 @@
 // plugin/src/cluster-action.ts
 import { action, SingletonAction, WillAppearEvent, WillDisappearEvent } from "@elgato/streamdeck";
+import { trace } from "./trace.js";
 
 interface ClusterSettings {
   metric: string;
@@ -64,13 +65,17 @@ export class ClusterAction extends SingletonAction {
     label: string,
   ): Promise<void> {
     try {
-      const resp = await fetch(`${kromgo_url}/badges/${metric}?format=json`);
+      const url = `${kromgo_url}/badges/${metric}?format=json`;
+      trace(`poll ${url}`);
+      const resp = await fetch(url);
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       const data = await resp.json() as KromgoResponse;
+      trace(`ok ${metric} = ${data.value}`);
       await act.setTitle(`${label}\n${data.value}`);
       const hex = COLOR_MAP[data.color] ?? COLOR_MAP["grey"];
       await act.setImage(coloredDot(hex!));
-    } catch {
+    } catch (err) {
+      trace(`FAILED ${metric}: ${String(err)}`);
       await act.setTitle(`${label}\n?`);
       await act.setImage(coloredDot(COLOR_MAP["grey"]!));
     }
