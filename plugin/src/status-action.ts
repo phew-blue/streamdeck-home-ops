@@ -85,5 +85,10 @@ function coloredCircle(color: string): string {
     <circle cx="72" cy="72" r="60" fill="${color}" opacity="0.3"/>
     <circle cx="72" cy="72" r="20" fill="${color}"/>
   </svg>`;
-  return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
+  // charset=utf8 with the markup inline, NOT base64. Stream Deck accepts
+  // base64 for raster formats (PNG, JPEG) but not for SVG: given
+  // "data:image/svg+xml;base64,..." it silently draws nothing and setImage
+  // still resolves, so the key keeps whatever was under it and the failure
+  // looks like the image simply not rendering.
+  return `data:image/svg+xml;charset=utf8,${encodeURIComponent(svg)}`;
 }
