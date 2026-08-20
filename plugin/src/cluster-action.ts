@@ -7,11 +7,20 @@ interface ClusterSettings {
   label: string;
 }
 
+// The response from kromgo's JSON endpoint.
+//
+// This is home-operations/kromgo, which is NOT the shields.io-shaped payload
+// kashalls/kromgo served ({schemaVersion, label, message, color} straight off
+// /<metric>). The project moved orgs and the API moved with it: badges now live
+// under /badges/<id>, and asking for JSON gives the value in `value` rather
+// than `message`. Reading the old field silently yields undefined, which is
+// indistinguishable from the endpoint being down -- every tile just shows "?".
 interface KromgoResponse {
-  schemaVersion: number;
-  label: string;
-  message: string;
+  id: string;
+  title: string;
+  value: string;
   color: string;
+  result: number;
 }
 
 const POLL_INTERVAL_MS = 5 * 60 * 1000;
@@ -55,10 +64,10 @@ export class ClusterAction extends SingletonAction {
     label: string,
   ): Promise<void> {
     try {
-      const resp = await fetch(`${kromgo_url}/${metric}`);
+      const resp = await fetch(`${kromgo_url}/badges/${metric}?format=json`);
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       const data = await resp.json() as KromgoResponse;
-      await act.setTitle(`${label}\n${data.message}`);
+      await act.setTitle(`${label}\n${data.value}`);
       const hex = COLOR_MAP[data.color] ?? COLOR_MAP["grey"];
       await act.setImage(coloredDot(hex!));
     } catch {
