@@ -5,9 +5,21 @@ import type { PodStatus, ResourceUsage, HelmReleaseState } from "./types.js";
 
 const execAsync = promisify(exec);
 
+// How long a single kubectl invocation may take before it is abandoned.
+const EXEC_TIMEOUT_MS = 10_000;
+
 async function run(cmd: string): Promise<string> {
   try {
-    const { stdout } = await execAsync(cmd, { timeout: 10000 });
+    const { stdout } = await execAsync(cmd, {
+      timeout: EXEC_TIMEOUT_MS,
+      // windowsHide defaults to FALSE. Without it every invocation flashes a
+      // console window on the user's desktop -- and because exec() goes via
+      // cmd.exe, that happens even when kubectl is not installed and the
+      // command fails instantly. On a machine running a fullscreen game those
+      // windows steal focus, which is how this was found: it was pulling the
+      // user out of a match every thirty seconds.
+      windowsHide: true,
+    });
     return stdout.trim();
   } catch {
     return "";
