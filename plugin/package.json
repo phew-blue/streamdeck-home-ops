@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "esbuild src/plugin.ts --bundle --platform=node --format=esm --outfile=dist/plugin.js --sourcemap"
+    "build": "node esbuild.mjs"
   },
   "dependencies": {
     "@elgato/streamdeck": "*"
