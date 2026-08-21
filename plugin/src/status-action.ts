@@ -8,7 +8,7 @@ import {
 } from "@elgato/streamdeck";
 import type { StatusSettings } from "./types.js";
 import { getPodStatus, getCpuUsage, getRamUsage } from "./kubectl.js";
-import { bar, gauge, BRAND, band } from "./tile.js";
+import { bar, BRAND, podsFace, usageFace } from "./tile.js";
 import { paint, keepPainted, stopPainting } from "./paint.js";
 
 const POLL_INTERVAL_MS = 30_000;
@@ -58,31 +58,21 @@ export class StatusAction extends SingletonAction {
     metric: "pods" | "cpu" | "ram",
   ): Promise<void> {
     try {
+      // The wording and the artwork are chosen together, in tile.ts, so that a
+      // page of the same metric reads as the same metric.
+      let face;
       if (metric === "pods") {
         const status = await getPodStatus(deployment, namespace);
-        const accent = status.ready === 0 ? BRAND.coral
-          : status.ready < status.desired ? BRAND.gold
-          : BRAND.aqua;
-        // Restarts ride in the label rather than the value: they are a caveat
-        // on the number, not the number itself, and they are usually zero.
-        const label = status.restarts > 0 ? `${status.restarts}r` : "pods";
-        await paint(id, act, `${label}\n${status.ready}/${status.desired}`, bar(accent));
+        face = podsFace(status.ready, status.desired, status.restarts);
       } else {
         const usage = metric === "cpu"
           ? await getCpuUsage(deployment, namespace)
           : await getRamUsage(deployment, namespace);
-        const unit = metric === "cpu" ? "m" : "Mi";
-        // A dial only where a limit exists to divide by. Without one there is
-        // no ceiling, so the plain figure is the honest thing to show.
-        if (usage.limit > 0) {
-          const pct = usage.used / usage.limit;
-          await paint(id, act, `${metric.toUpperCase()}\n${Math.round(pct * 100)}%`, gauge(band(pct * 100), pct));
-        } else {
-          await paint(id, act, `${metric.toUpperCase()}\n${usage.used}${unit}`, bar(BRAND.sky));
-        }
+        face = usageFace(metric, usage.used, usage.limit);
       }
+      await paint(id, act, face.title, face.image);
     } catch {
-await paint(id, act, `${metric.toUpperCase()}\n?`, bar(BRAND.grey));
+      await paint(id, act, `${metric.toUpperCase()}\n?`, bar(BRAND.grey));
     }
   }
 }

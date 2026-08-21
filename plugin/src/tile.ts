@@ -44,6 +44,20 @@ export function gauge(accent: string, fraction: number): string {
 }
 
 /**
+ * The dial with nothing filled: the ring drawn as bare track.
+ *
+ * A tile's shape says what it measures, so a CPU reading is a dial whether or
+ * not the deployment declares a limit -- swapping in a bar for the unlimited
+ * ones made a page of CPU tiles read as two different metrics. There is still
+ * no ceiling to fill against, so nothing is filled and no denominator is
+ * invented; the title carries the absolute figure ("88m"), which is what
+ * separates this from a bounded tile sitting at 0%.
+ */
+export function emptyGauge(): string {
+  return memo("gauge:empty", () => gaugeTile(BRAND.grey, 0));
+}
+
+/**
  * A product mark, in that product's own colour.
  *
  * The metric id carries the product name (<product>_version), so the colour
@@ -76,4 +90,51 @@ export function accentFor(name: string | undefined): string {
     case "blue": return BRAND.sky;
     default: return BRAND.grey;
   }
+}
+
+// --- The readings, worded and dressed -------------------------------------
+//
+// The two lines of a key's title are label then value, and the rules are the
+// same for every tile: the label line always names the metric, and a caveat is
+// appended to it rather than put in its place. These live here, next to the
+// artwork they pick, so the wording and the shape cannot drift apart.
+
+/** What a key should be showing: its two-line title, and its artwork. */
+export interface Face {
+  title: string;
+  image: string;
+}
+
+/**
+ * A CPU or memory reading for a deployment.
+ *
+ * `limit` is 0 when the deployment declares none, which is the common case.
+ */
+export function usageFace(metric: "cpu" | "ram", used: number, limit: number): Face {
+  const label = metric.toUpperCase();
+  if (limit > 0) {
+    const pct = used / limit;
+    return {
+      title: `${label}\n${Math.round(pct * 100)}%`,
+      image: gauge(band(pct * 100), pct),
+    };
+  }
+  const unit = metric === "cpu" ? "m" : "Mi";
+  return { title: `${label}\n${used}${unit}`, image: emptyGauge() };
+}
+
+/**
+ * A readiness reading for a deployment.
+ *
+ * Restarts are a caveat on the number rather than the number itself, so they
+ * ride on the label -- appended to it, not in place of it. An earlier version
+ * replaced the word, which put "2r 1/1" beside "pods 1/1" and left the label
+ * line no longer saying what it counted.
+ */
+export function podsFace(ready: number, desired: number, restarts: number): Face {
+  const accent = ready === 0 ? BRAND.coral
+    : ready < desired ? BRAND.gold
+    : BRAND.aqua;
+  const label = restarts > 0 ? `pods ${restarts}r` : "pods";
+  return { title: `${label}\n${ready}/${desired}`, image: bar(accent) };
 }

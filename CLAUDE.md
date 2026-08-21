@@ -23,6 +23,8 @@ python -m pytest tests/ -v
 
 # Build the plugin bundle (plugin/dist/plugin.js)
 cd plugin && npm ci && npm run build
+# Plugin unit tests (esbuild + node's built-in runner; no test framework)
+cd plugin && npm test
 # Package into dist-plugin/com.phew.blue.homeops.sdPlugin
 cd plugin && bash build-plugin.sh
 # On the Windows host: build + install into Stream Deck
@@ -42,6 +44,24 @@ Single source of truth for the generated profile: `nodes`, `pinned` quick-launch
 - `deployment` must match the actual k8s Deployment name **and** is also used as the pod label selector `app.kubernetes.io/name=<deployment>` — verify both against the live cluster.
 - Apps without a web UI use `https://phew.blue` as a placeholder URL.
 - App icons are downloaded from `walkxcode/dashboard-icons`; if the icon filename differs from the app name, add a mapping to `ICON_NAME_OVERRIDES` in `builder/icons.py`.
+
+## Tile Vocabulary
+
+The plugin draws its own key artwork (`plugin/src/draw.ts`, `plugin/src/tile.ts`). Four rules,
+settled deliberately — don't reopen them piecemeal:
+
+- **Form follows the metric, not the data.** CPU and RAM are always dials; counts, versions,
+  durations and states are always bars; product identity is a mark. A tile never changes shape
+  because of what the cluster happened to report.
+- **The title is the reading; the image never carries a number.** An earlier version drew the
+  value into the PNG and cleared the title — when Stream Deck declined the image the key went
+  blank with nothing in any log.
+- **A dial with no ceiling is drawn as bare track.** Most deployments declare no CPU/memory
+  limit; those tiles keep the dial, unfilled, and the title carries the absolute figure
+  (`88m`, `412Mi`) so it cannot be read as 0%.
+- **The label line always names the metric.** Caveats are appended, never substituted:
+  `pods` / `pods 2r`.
+
 
 ## Release Flow
 

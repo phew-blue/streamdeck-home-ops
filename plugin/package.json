@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "node esbuild.mjs"
+    "build": "node esbuild.mjs",
+    "test": "node test.mjs"
   },
   "dependencies": {
     "@elgato/streamdeck": "*"
