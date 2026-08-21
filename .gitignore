@@ -9,3 +9,5 @@ profile/home-ops.streamDeckProfile
 icons/apps/
 dist-plugin
 plugin/logs/
+plugin/plugin-trace.log
+plugin/logs/
