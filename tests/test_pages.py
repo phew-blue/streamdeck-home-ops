@@ -2,6 +2,7 @@
 import pytest
 from builder.pages import chunk_apps, build_actions_layer, build_status_layer, build_namespace_folder
 from unittest.mock import patch
+from builder.layout import pos
 
 
 SAMPLE_APPS = [
@@ -59,3 +60,36 @@ def test_build_status_layer_has_plugin_buttons():
     assert "9" in layer["Actions"]
     assert layer["Actions"]["9"]["UUID"] == "com.phew.blue.homeops.status"
     assert layer["Actions"]["9"]["Settings"]["metric"] == "pods"
+
+
+# The nav contract is defined by the live profile's first media page:
+# back at col0/row0, Down at col7/row1, Next at col7/row3 -- and nothing else.
+# There is deliberately no "Up" (col7/row0) and no "Prev" (col0/row3); both were
+# removed on the deck by hand, and a generator that restores them regresses it.
+
+def test_status_layer_nav_matches_the_live_media_page():
+    layer = build_status_layer(
+        apps=SAMPLE_APPS[:6],
+        namespace="media",
+        install_path=r"C:\StreamDeck-HomeOps",
+        has_next=True,
+        next_folder_manifest={"Actions": {}},
+    )
+    acts = layer["Actions"]
+    assert acts[pos(0, 0)]["UUID"] == "com.elgato.streamdeck.profile.backtoparent"
+    assert acts[pos(1, 7)]["UUID"] == "com.elgato.streamdeck.profile.openchild"
+    assert acts[pos(3, 7)]["UUID"] == "com.elgato.streamdeck.profile.openchild"
+    assert pos(0, 7) not in acts, "no Up key -- back at 0,0 already goes one level up"
+    assert pos(3, 0) not in acts, "no Prev key -- back at 0,0 already reaches the previous page"
+
+
+def test_actions_layer_has_exactly_one_back_key():
+    with patch("builder.pages._bat_path", return_value=r"C:\x.bat"):
+        layer = build_actions_layer(
+            apps=SAMPLE_APPS[:6],
+            namespace="media",
+            install_path=r"C:\StreamDeck-HomeOps",
+        )
+    backs = [p for p, a in layer["Actions"].items()
+             if a["UUID"] == "com.elgato.streamdeck.profile.backtoparent"]
+    assert backs == [pos(0, 0)]
