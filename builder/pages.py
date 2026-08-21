@@ -34,9 +34,6 @@ def build_actions_layer(apps: list, namespace: str, install_path: str) -> dict:
     # Col 1 row 1 (pos 0): Home — one level back (to status layer)
     actions[pos(0, 0)] = single_back_action("Home", "Icons/actions/nav-home")
 
-    # Col 8 row 1 (pos 7): up to status layer
-    actions[pos(0, 7)] = single_back_action("Up", "Icons/actions/nav-up")
-
     for i, app in enumerate(apps):
         col = INNER_COLS[i]
         name = app["name"]
@@ -68,7 +65,6 @@ def build_status_layer(
     apps: list,
     namespace: str,
     install_path: str,
-    has_prev: bool,
     has_next: bool,
     next_folder_manifest: dict = None,
 ) -> dict:
@@ -86,9 +82,6 @@ def build_status_layer(
     )
     actions[pos(1, 7)] = folder_action("Down", "Icons/actions/nav-down", actions_layer_manifest,
                                        show_title=False)
-
-    if has_prev:
-        actions[pos(3, 0)] = single_back_action("Prev", "Icons/actions/nav-back")
 
     if has_next and next_folder_manifest is not None:
         actions[pos(3, 7)] = folder_action("Next", "Icons/actions/nav-next", next_folder_manifest,
@@ -131,7 +124,6 @@ def build_namespace_folder(ns: dict, install_path: str) -> dict:
             apps=chunk,
             namespace=namespace,
             install_path=install_path,
-            has_prev=(page_idx > 0),
             has_next=(page_idx < len(chunks) - 1),
             next_folder_manifest=next_manifest,
         )

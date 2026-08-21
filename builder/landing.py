@@ -3,7 +3,7 @@
 
 import os
 from builder.actions import (
-    folder_action, open_file_action, single_back_action,
+    folder_action, open_file_action, single_back_action, plugin_cluster_action,
 )
 from builder.layout import pos, make_manifest
 
@@ -32,13 +32,7 @@ STAT_LABELS = {
 
 
 def _cluster_action(metric: str, label: str, kromgo_url: str) -> dict:
-    return {
-        "Name": label,
-        "UUID": "com.phew.blue.homeops.cluster",
-        "State": 0,
-        "States": [{"Image": "Icons/status-loading", "ShowTitle": True, "Title": "..."}],
-        "Settings": {"metric": metric, "kromgo_url": kromgo_url, "label": label},
-    }
+    return plugin_cluster_action(metric, label, kromgo_url)
 
 
 def build_landing_page(

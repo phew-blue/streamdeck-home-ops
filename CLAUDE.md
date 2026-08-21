@@ -2,7 +2,7 @@
 
 Stream Deck XL profile + plugin for the [home-ops](https://github.com/phew-blue/home-ops) Kubernetes cluster. Two halves:
 
-1. **Python profile generator** (`generate.py` + `builder/`) — reads `config.yaml` and produces `profile/home-ops.streamDeckProfile` (a ZIP of page manifests, navigable as landing page → Talos nodes / K8s namespace grid → per-namespace status+action layers).
+1. **Python profile generator** (`generate.py` + `builder/`) — reads `config.yaml` and produces `profile/home-ops.streamDeckProfile` in the Stream Deck **3.0** archive format (navigable as landing page → Talos nodes / K8s namespace grid → per-namespace status+action layers).
 2. **TypeScript Stream Deck plugin** (`plugin/`, UUID `com.phew.blue.homeops`) — Node 20 plugin built with esbuild on the `@elgato/streamdeck` SDK (v2). Provides three live-updating actions: **App Status**, **Cluster Metric**, **Node Status**.
 
 The deck runs on a Windows host; PowerShell helper scripts in `scripts/` are copied to `C:\StreamDeck-HomeOps` by `scripts/install.ps1` and invoked by buttons (logs, restart-pod, force-reconcile, update-profile, app launchers).
@@ -50,7 +50,10 @@ Single source of truth for the generated profile: `nodes`, `pinned` quick-launch
 ## Gotchas
 
 - `profile/home-ops.streamDeckProfile` is in `.gitignore` but committed by CI with `git add -f` — don't commit it manually.
-- `Default Profile.streamDeckProfile` and `usethisone.streamDeckProfile` are committed binary ZIPs (the user's full deck profile). `generate.py --embed` rewrites pages into the Default Profile, converting the home-ops 1.0 flat-key manifest format to the Default Profile 3.0 `col,row` format (`builder/embed.py`).
+- **Profile format is 3.0.** The archive is `package.json` at the root plus `Profiles/<UUID>.sdProfile/{manifest.json,Profiles/<PAGE-UUID>/…}`; every page is a sibling directory and nesting is by `Settings.ProfileUUID` reference. Stream Deck 7.5 rejects the old 1.0 layout (root `manifest.json` + `Icons/`) with "unknown file contents". `builder/` still assembles a compact 1.0-shaped page tree as an intermediate; `builder/v3.py` is the only place that converts it, for both `build_zip` and `--embed`.
+- **Never put a `Title` or an `Image` on a `com.phew.blue.homeops.*` key.** Stream Deck treats either as a user override and silently refuses `setTitle`/`setImage`, so the tile can never update — no error anywhere. `builder/actions.py` builds plugin keys without them and `builder/v3.py` drops them again at emit time; `tests/test_profile.py::test_no_plugin_key_carries_title_or_image` guards it. `scripts/strip-plugin-overrides.py` is the pre-fix workaround and is now only needed for hand-made exports.
+- Page and action UUIDs are derived (`uuid5`) from a stable path through the page tree, so regenerating an unchanged `config.yaml` is byte-identical and a re-import replaces the deployed profile rather than orphaning it. The profile's own UUID/name/device are pinned in `config.yaml` under `profile:`.
+- `Default Profile.streamDeckProfile` and `usethisone.streamDeckProfile` are committed binary ZIPs (the user's full deck profile); `usethisone` is the reference export the generator's output is checked against. `generate.py --embed` grafts the home-ops pages into the Default Profile as a folder (`builder/embed.py`).
 - The plugin manifest (`plugin/manifest.json`) is Windows-only and requires Stream Deck software 6.4+. Action UUIDs (`com.phew.blue.homeops.{status,cluster,node}`) are referenced by both `builder/` page generation and `builder/embed.py` — keep all three in sync if renaming.
 - `plugin/package.json` builds with esbuild only (no tsc typecheck step); `npm run build` is the whole build.
 - Generated artifacts are gitignored: `plugin/dist/`, `dist-plugin/`, `icons/apps/`, `scripts/launchers/`.

@@ -76,7 +76,7 @@ One column per node (cols 2-6). Each column: name+role (R1), pods running/capaci
 - **R2**: Restart pod (`kubectl rollout restart`)
 - **R3**: Force reconcile (`flux reconcile helmrelease`)
 - **Col 8 up**: Back to status layer
-- **Col 1 home**: Back to landing page
+- **Col 1 home**: Back one level (to the status layer)
 
 ## Updating the profile
 

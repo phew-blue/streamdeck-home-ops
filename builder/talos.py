@@ -1,7 +1,7 @@
 # builder/talos.py
 """Build the Talos nodes page."""
 
-from builder.actions import single_back_action
+from builder.actions import single_back_action, plugin_node_action
 from builder.layout import pos, make_manifest
 
 INNER_COLS = list(range(1, 7))  # cols 1-6 (0-indexed)
@@ -11,13 +11,7 @@ def _node_action(node_name: str, role: str, metric: str) -> dict:
     """Plugin action for a single node metric."""
     label = "CP" if role == "control-plane" else "W"
     name = f"{node_name} ({label})" if metric == "node" else f"{node_name} {metric}"
-    return {
-        "Name": name,
-        "UUID": "com.phew.blue.homeops.node",
-        "State": 0,
-        "States": [{"Image": f"Icons/node-{metric}", "ShowTitle": True, "Title": "..."}],
-        "Settings": {"node": node_name, "role": role, "metric": metric},
-    }
+    return plugin_node_action(name, node_name, role, metric)
 
 
 def build_talos_page(nodes: list) -> dict:

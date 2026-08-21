@@ -23,6 +23,18 @@ keep their icons, which is where the profile's artwork actually lives.
 The real fix is for the profile generator to stop writing Title and Image on
 plugin-driven keys at all; this script is what makes an already-exported
 profile usable in the meantime.
+
+# Status: redundant for generated profiles
+
+The generator no longer writes either field on a plugin key -- builder/actions.py
+never sets them and builder/v3.py drops them again at emit time, with
+tests/test_profile.py::test_no_plugin_key_carries_title_or_image guarding it.
+Running this over `python generate.py` output is a no-op (it will report
+"titles removed: 0").
+
+It is kept for the case it was written for: a profile exported *from the deck*,
+where the Stream Deck app writes both fields back onto every key. Repair such an
+export with this script before re-importing it.
 """
 import json
 import sys

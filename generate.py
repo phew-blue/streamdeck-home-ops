@@ -27,13 +27,13 @@ def generate(config: dict, output_path: str = "profile/home-ops.streamDeckProfil
         print(f"Building namespace: {ns['name']} ({len(ns['apps'])} apps)")
         ns_manifests[ns["name"]] = build_namespace_folder(ns, install_path)
 
-    # K8s namespace grid (depth=1 from landing page)
+    # K8s namespace grid (one level below the landing page)
     k8s_grid = build_k8s_grid(
         ns_manifests=ns_manifests,
         pinned=config.get("pinned", []),
     )
 
-    # Talos nodes page (depth=1 from landing page)
+    # Talos nodes page (one level below the landing page)
     talos_page = build_talos_page(nodes=config.get("nodes", []))
 
     # Landing page (top level of our profile)
@@ -45,7 +45,7 @@ def generate(config: dict, output_path: str = "profile/home-ops.streamDeckProfil
     )
 
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-    build_zip(landing, output_path)
+    build_zip(landing, output_path, profile_cfg=config.get("profile"))
     print(f"\n✓ Profile written to {output_path}")
 
     return landing
@@ -59,7 +59,7 @@ def embed(config: dict, default_profile: str = "Default Profile.streamDeckProfil
     import io
 
     hop_path = "profile/home-ops.streamDeckProfile"
-    generate(config, output_path=hop_path)
+    landing = generate(config, output_path=hop_path)
 
     # Download and resize Discord server icon for the Home Ops button
     icon_url = "https://cdn.discordapp.com/icons/673534664354430999/a_1824509333499341fd53b3d9389c5660.webp?size=64"
@@ -81,7 +81,7 @@ def embed(config: dict, default_profile: str = "Default Profile.streamDeckProfil
         print(f"✗ Home Ops icon error: {e}, using text label")
 
     print(f"\nEmbedding into {default_profile} ...")
-    embed_home_ops(default_profile, hop_path, home_ops_icon=home_ops_icon)
+    embed_home_ops(default_profile, landing, home_ops_icon=home_ops_icon)
 
 
 if __name__ == "__main__":

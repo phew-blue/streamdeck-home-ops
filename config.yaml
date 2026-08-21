@@ -5,6 +5,17 @@ install_path: "C:\\StreamDeck-HomeOps"
 domain: phew.blue
 kromgo_url: https://kromgo.phew.blue
 
+# Identity of the emitted Stream Deck 3.0 profile.
+# The uuid is what makes a re-import replace the profile already on the deck
+# instead of adding a second copy, so do not change it casually. Everything
+# below is optional; builder/v3.py has the same values as defaults.
+profile:
+  name: Home Ops
+  uuid: 7AB35742-EBD6-42A4-A8A4-15D3FD4EEBBB
+  device:
+    model: 20GAT9901   # Stream Deck XL
+    uuid: 9c55451f-0684-4931-b0cb-bddf1b58fef4
+
 nodes:
   - name: talos-01
     role: control-plane

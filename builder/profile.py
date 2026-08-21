@@ -1,15 +1,23 @@
 # builder/profile.py
-"""Assemble the .streamDeckProfile ZIP from manifest + icons."""
+"""Assemble the .streamDeckProfile archive.
 
-import json
-import zipfile
-from pathlib import Path
+The archive is written in the Stream Deck 3.0 format; see builder/v3.py for the
+layout and for why the 1.0 format this repo used to emit is rejected outright by
+Stream Deck 7.5. The page tree the builder modules produce is still the compact
+1.0-shaped dict -- it is a convenient intermediate representation and every
+builder module and test speaks it -- and v3.py is the single place that turns it
+into what the deck will load.
+"""
+
+from builder.v3 import write_profile
 
 
 def collect_icon_paths(manifest: dict) -> set:
-    """Recursively collect all Icon references from a manifest."""
+    """Recursively collect all Icon references from a page tree."""
     paths = set()
-    for action in manifest.get("Actions", {}).values():
+    for action in (manifest.get("Actions") or {}).values():
+        if action is None:
+            continue
         for state in action.get("States", []):
             img = state.get("Image", "")
             if img:
@@ -19,24 +27,6 @@ def collect_icon_paths(manifest: dict) -> set:
     return paths
 
 
-def build_zip(manifest: dict, output_path: str):
-    """Write the .streamDeckProfile ZIP file."""
-    icon_paths = collect_icon_paths(manifest)
-
-    with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as zf:
-        zf.writestr("manifest.json", json.dumps(manifest, indent=2))
-
-        for icon_ref in icon_paths:
-            # icon_ref is like "Icons/plex" or "Icons/actions/nav-home"
-            # Map to disk: icons/apps/plex.png, icons/actions/nav-home.png, etc.
-            parts = icon_ref.split("/")
-            name = parts[-1] + ".png"
-            candidates = [
-                Path("icons") / "apps" / name,
-                Path("icons") / "namespaces" / name,
-                Path("icons") / "actions" / name,
-            ]
-            for candidate in candidates:
-                if candidate.exists():
-                    zf.write(candidate, icon_ref + ".png")
-                    break
+def build_zip(manifest: dict, output_path: str, profile_cfg: dict = None):
+    """Write the .streamDeckProfile ZIP file in 3.0 format."""
+    return write_profile(manifest, output_path, profile_cfg)

@@ -53,7 +53,6 @@ def test_build_status_layer_has_plugin_buttons():
             apps=SAMPLE_APPS[:3],
             namespace="media",
             install_path=r"C:\StreamDeck-HomeOps",
-            has_prev=False,
             has_next=False,
         )
     # col 2 row 1 = pos 9 → pods status for first app
